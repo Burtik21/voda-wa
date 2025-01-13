@@ -5,5 +5,7 @@ const authenticateToken = require('../middleware/authMiddleware');  // Import mi
 
 // 🛡️ Chráněný endpoint na přidání zákazníka
 router.post('/add-customer', authenticateToken, firmController.addCustomerWithProperty);
+router.delete('/delete-customer', authenticateToken, firmController.deleteCustomerByEmail);
+
 
 module.exports = router;

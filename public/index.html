@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📊 Správa měřidel a odečtů</title>
+</head>
+<body>
+    <h1>📊 Správa měřidel a odečtů</h1>
+
+    <!-- ✅ Přidání měřidla -->
+    <h2>➕ Přidat měřidlo</h2>
+    <form id="addMeterForm">
+        <label for="type">Typ měřidla (water/heat):</label><br>
+        <input type="text" id="type" name="type" required><br><br>
+
+        <label for="serial_number">Sériové číslo:</label><br>
+        <input type="text" id="serial_number" name="serial_number" required><br><br>
+
+        <button type="submit">📥 Přidat měřidlo</button>
+    </form>
+
+    <hr>
+
+    <!-- ✏️ Úprava měřidla -->
+    <h2>✏️ Upravit měřidlo</h2>
+    <form id="editMeterForm">
+        <label for="edit_meter_id">ID měřidla:</label><br>
+        <input type="number" id="edit_meter_id" name="meter_id" required><br><br>
+
+        <label for="edit_type">Nový typ měřidla (water/heat):</label><br>
+        <input type="text" id="edit_type" name="type" required><br><br>
+
+        <label for="edit_serial_number">Nové sériové číslo:</label><br>
+        <input type="text" id="edit_serial_number" name="serial_number" required><br><br>
+
+        <button type="submit">✏️ Upravit měřidlo</button>
+    </form>
+
+    <hr>
+
+    <!-- 📥 Přidání odečtu -->
+    <h2>📥 Přidat odečet</h2>
+    <form id="addReadingForm">
+        <label for="meter_id_reading">ID měřidla:</label><br>
+        <input type="number" id="meter_id_reading" name="meter_id" required><br><br>
+
+        <label for="value">Hodnota odečtu:</label><br>
+        <input type="number" id="value" name="value" step="0.01" required><br><br>
+
+        <label for="reading_date">Datum odečtu:</label><br>
+        <input type="date" id="reading_date" name="reading_date" required><br><br>
+
+        <button type="submit">📥 Přidat odečet</button>
+    </form>
+
+    <hr>
+
+    <!-- ✏️ Úprava odečtu -->
+    <h2>✏️ Upravit odečet</h2>
+    <form id="editReadingForm">
+        <label for="edit_reading_id">ID odečtu:</label><br>
+        <input type="number" id="edit_reading_id" name="reading_id" required><br><br>
+
+        <label for="edit_value">Nová hodnota odečtu:</label><br>
+        <input type="number" id="edit_value" name="value" step="0.01" required><br><br>
+
+        <label for="edit_reading_date">Nové datum odečtu:</label><br>
+        <input type="date" id="edit_reading_date" name="reading_date" required><br><br>
+
+        <button type="submit">✏️ Upravit odečet</button>
+    </form>
+
+    <hr>
+
+    <div id="responseMessage"></div>
+
+    <script>
+        const token = "TVŮJ_JWT_TOKEN"; // Nahraď skutečným JWT tokenem
+
+        // ✅ Přidání měřidla
+        document.getElementById('addMeterForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const data = {
+                type: document.getElementById('type').value,
+                serial_number: document.getElementById('serial_number').value
+            };
+
+            fetch('http://localhost:3000/voda/customer/add-meter', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => alert(data.message))
+            .catch(error => console.error('❌ Chyba:', error));
+        });
+
+        // ✏️ Úprava měřidla
+        document.getElementById('editMeterForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const data = {
+                meter_id: document.getElementById('edit_meter_id').value,
+                type: document.getElementById('edit_type').value,
+                serial_number: document.getElementById('edit_serial_number').value
+            };
+
+            fetch('http://localhost:3000/voda/customer/edit-meter', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => alert(data.message))
+            .catch(error => console.error('❌ Chyba:', error));
+        });
+
+        // 📥 Přidání odečtu
+        document.getElementById('addReadingForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const data = {
+                meter_id: document.getElementById('meter_id_reading').value,
+                value: document.getElementById('value').value,
+                reading_date: document.getElementById('reading_date').value
+            };
+
+            fetch('http://localhost:3000/voda/customer/add-reading', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => alert(data.message))
+            .catch(error => console.error('❌ Chyba:', error));
+        });
+
+        // ✏️ Úprava odečtu
+        document.getElementById('editReadingForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const data = {
+                reading_id: document.getElementById('edit_reading_id').value,
+                value: document.getElementById('edit_value').value,
+                reading_date: document.getElementById('edit_reading_date').value
+            };
+
+            fetch('http://localhost:3000/voda/customer/edit-reading', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => alert(data.message))
+            .catch(error => console.error('❌ Chyba:', error));
+        });
+    </script>
+</body>
+</html>
