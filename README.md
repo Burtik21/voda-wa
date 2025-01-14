@@ -12,6 +12,7 @@
 
 3. **Použití API endpointů**
    - Jednotlivé endpointy slouží pro správu zákazníků, měřidel a odečtů.
+   - Commandy níže jsou na cmd ( ne powershell ) pomocí curl
    - HTML formulář (zatím né moc funkční) slouží k přidání/upravení  měřičů a odečtů
 
 
