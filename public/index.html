@@ -3,167 +3,316 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>📊 Správa měřidel a odečtů</title>
+    <title>Správa měřidel a odečtů</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1, h2 {
+            color: #333;
+        }
+
+        form {
+            background-color: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        input[type="password"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .error {
+            color: red;
+        }
+
+        .success {
+            color: green;
+        }
+    </style>
 </head>
 <body>
-    <h1>📊 Správa měřidel a odečtů</h1>
 
-    <!-- ✅ Přidání měřidla -->
-    <h2>➕ Přidat měřidlo</h2>
-    <form id="addMeterForm">
-        <label for="type">Typ měřidla (water/heat):</label><br>
-        <input type="text" id="type" name="type" required><br><br>
+    <h1>Správa měřidel a odečtů</h1>
 
-        <label for="serial_number">Sériové číslo:</label><br>
-        <input type="text" id="serial_number" name="serial_number" required><br><br>
-
-        <button type="submit">📥 Přidat měřidlo</button>
+    <!-- 🔑 Zadání JWT Tokenu -->
+    <form id="tokenForm">
+        <label for="tokenInput">JWT Token:</label>
+        <input type="text" id="tokenInput" placeholder="Vložte JWT token" required>
+        <button type="submit">Potvrdit token</button>
+        <p id="tokenMessage" class="error"></p>
     </form>
 
     <hr>
 
-    <!-- ✏️ Úprava měřidla -->
-    <h2>✏️ Upravit měřidlo</h2>
-    <form id="editMeterForm">
-        <label for="edit_meter_id">ID měřidla:</label><br>
-        <input type="number" id="edit_meter_id" name="meter_id" required><br><br>
+    <!-- ✅ Přidání měřidla -->
+<h2>Přidat měřidlo</h2>
+<form id="addMeterForm">
+    <label for="type">Typ měřidla (cold/warm):</label>
+    <select id="type" name="type" required>
+        <option value="">-- Vyberte typ měřidla --</option>
+        <option value="cold">Studená voda</option>
+        <option value="warm">Teplá voda</option>
+    </select>
 
-        <label for="edit_type">Nový typ měřidla (water/heat):</label><br>
-        <input type="text" id="edit_type" name="type" required><br><br>
+    <label for="serial_number">Sériové číslo:</label>
+    <input type="text" id="serial_number" name="serial_number" required>
 
-        <label for="edit_serial_number">Nové sériové číslo:</label><br>
-        <input type="text" id="edit_serial_number" name="serial_number" required><br><br>
+    <button type="submit">Přidat měřidlo</button>
+</form>
 
-        <button type="submit">✏️ Upravit měřidlo</button>
-    </form>
+<!-- ✏️ Úprava měřidla -->
+<h2>Upravit měřidlo</h2>
+<form id="editMeterForm">
+    <label for="old_serial_number">Staré sériové číslo:</label>
+    <input type="text" id="old_serial_number" name="old_serial_number" required>
+
+    <label for="new_serial_number">Nové sériové číslo:</label>
+    <input type="text" id="new_serial_number" name="new_serial_number" required>
+
+    <label for="edit_type">Nový typ měřidla (cold/warm):</label>
+    <select id="edit_type" name="type" required>
+        <option value="">-- Vyberte typ měřidla --</option>
+        <option value="cold">Studená voda</option>
+        <option value="warm">Teplá voda</option>
+    </select>
+
+    <button type="submit">Upravit měřidlo</button>
+</form>
+
 
     <hr>
 
     <!-- 📥 Přidání odečtu -->
-    <h2>📥 Přidat odečet</h2>
+    <h2>Přidat odečet</h2>
     <form id="addReadingForm">
-        <label for="meter_id_reading">ID měřidla:</label><br>
-        <input type="number" id="meter_id_reading" name="meter_id" required><br><br>
+        <label for="serial_number_reading">Sériové číslo měřidla:</label>
+        <input type="text" id="serial_number_reading" name="serial_number" required>
 
-        <label for="value">Hodnota odečtu:</label><br>
-        <input type="number" id="value" name="value" step="0.01" required><br><br>
+        <label for="value">Hodnota odečtu:</label>
+        <input type="number" id="value" name="value" step="0.01" required>
 
-        <label for="reading_date">Datum odečtu:</label><br>
-        <input type="date" id="reading_date" name="reading_date" required><br><br>
+        <label for="reading_date">Datum odečtu:</label>
+        <input type="date" id="reading_date" name="reading_date" required>
 
-        <button type="submit">📥 Přidat odečet</button>
+        <button type="submit">Přidat odečet</button>
     </form>
-
-    <hr>
 
     <!-- ✏️ Úprava odečtu -->
-    <h2>✏️ Upravit odečet</h2>
+    <h2>Upravit odečet</h2>
     <form id="editReadingForm">
-        <label for="edit_reading_id">ID odečtu:</label><br>
-        <input type="number" id="edit_reading_id" name="reading_id" required><br><br>
+        <label for="old_reading_id">ID odečtu:</label>
+        <input type="number" id="old_reading_id" name="reading_id" required>
 
-        <label for="edit_value">Nová hodnota odečtu:</label><br>
-        <input type="number" id="edit_value" name="value" step="0.01" required><br><br>
+        <label for="edit_value">Nová hodnota odečtu:</label>
+        <input type="number" id="edit_value" name="value" step="0.01" required>
 
-        <label for="edit_reading_date">Nové datum odečtu:</label><br>
-        <input type="date" id="edit_reading_date" name="reading_date" required><br><br>
+        <label for="edit_reading_date">Nové datum odečtu:</label>
+        <input type="date" id="edit_reading_date" name="reading_date" required>
 
-        <button type="submit">✏️ Upravit odečet</button>
+        <button type="submit">Upravit odečet</button>
     </form>
 
     <hr>
 
-    <div id="responseMessage"></div>
-
     <script>
-        const token = "TVŮJ_JWT_TOKEN"; // Nahraď skutečným JWT tokenem
+        let token = "";
 
-        // ✅ Přidání měřidla
-        document.getElementById('addMeterForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const data = {
-                type: document.getElementById('type').value,
-                serial_number: document.getElementById('serial_number').value
-            };
+// ✅ Uložení JWT Tokenu
+document.getElementById('tokenForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    token = document.getElementById('tokenInput').value.trim();
 
-            fetch('http://localhost:3000/voda/customer/add-meter', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify(data)
-            })
-            .then(response => response.json())
-            .then(data => alert(data.message))
-            .catch(error => console.error('❌ Chyba:', error));
-        });
+    if (!token) {
+        document.getElementById('tokenMessage').textContent = "❌ Neplatný token. Prosím, vložte platný JWT token.";
+        document.getElementById('tokenMessage').classList.add("error");
+    } else {
+        document.getElementById('tokenMessage').textContent = "✅ Token byl úspěšně uložen.";
+        document.getElementById('tokenMessage').classList.remove("error");
+        document.getElementById('tokenMessage').classList.add("success");
+    }
+});
 
-        // ✏️ Úprava měřidla
-        document.getElementById('editMeterForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const data = {
-                meter_id: document.getElementById('edit_meter_id').value,
-                type: document.getElementById('edit_type').value,
-                serial_number: document.getElementById('edit_serial_number').value
-            };
+// 🔒 Ověření tokenu
+function checkToken() {
+    if (!token) {
+        alert("❌ Přístup odepřen! Nejprve vložte JWT token.");
+        return false;
+    }
+    return true;
+}
 
-            fetch('http://localhost:3000/voda/customer/edit-meter', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify(data)
-            })
-            .then(response => response.json())
-            .then(data => alert(data.message))
-            .catch(error => console.error('❌ Chyba:', error));
-        });
+// ✅ Přidání měřidla
+document.getElementById('addMeterForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    if (!checkToken()) return;
 
-        // 📥 Přidání odečtu
-        document.getElementById('addReadingForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const data = {
-                meter_id: document.getElementById('meter_id_reading').value,
-                value: document.getElementById('value').value,
-                reading_date: document.getElementById('reading_date').value
-            };
+    const type = document.getElementById('type').value;
+    const serialNumber = document.getElementById('serial_number').value.trim();
 
-            fetch('http://localhost:3000/voda/customer/add-reading', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify(data)
-            })
-            .then(response => response.json())
-            .then(data => alert(data.message))
-            .catch(error => console.error('❌ Chyba:', error));
-        });
+    // Ověření správného typu měřidla
+    if (type !== "cold" && type !== "warm") {
+        alert("❌ Typ měřidla musí být buď 'cold' nebo 'warm'.");
+        return;
+    }
 
-        // ✏️ Úprava odečtu
-        document.getElementById('editReadingForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const data = {
-                reading_id: document.getElementById('edit_reading_id').value,
-                value: document.getElementById('edit_value').value,
-                reading_date: document.getElementById('edit_reading_date').value
-            };
+    const data = {
+        type: type,
+        serial_number: serialNumber
+    };
 
-            fetch('http://localhost:3000/voda/customer/edit-reading', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify(data)
-            })
-            .then(response => response.json())
-            .then(data => alert(data.message))
-            .catch(error => console.error('❌ Chyba:', error));
-        });
+    fetch('http://localhost:3000/voda/customer/add-meter', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.message) {
+            alert(data.message);
+        } else {
+            alert("✅ Měřidlo bylo úspěšně přidáno.");
+        }
+    })
+    .catch(error => console.error('❌ Chyba:', error));
+});
+
+// ✏️ Úprava měřidla
+document.getElementById('editMeterForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    if (!checkToken()) return;
+
+    const oldSerialNumber = document.getElementById('old_serial_number').value.trim();
+    const newSerialNumber = document.getElementById('new_serial_number').value.trim();
+    const type = document.getElementById('edit_type').value;
+
+    // Ověření správného typu měřidla
+    if (type !== "cold" && type !== "warm") {
+        alert("❌ Typ měřidla musí být buď 'cold' nebo 'warm'.");
+        return;
+    }
+
+    const data = {
+        old_serial_number: oldSerialNumber,
+        new_serial_number: newSerialNumber,
+        type: type
+    };
+
+    fetch('http://localhost:3000/voda/customer/edit-meter', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.message) {
+            alert(data.message);
+        } else {
+            alert("✅ Měřidlo bylo úspěšně upraveno.");
+
+        }
+    })
+    .catch(error => console.error('❌ Chyba:', error));
+});
+
+// 📥 Přidání odečtu
+document.getElementById('addReadingForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    if (!checkToken()) return;
+
+    const data = {
+        serial_number: document.getElementById('serial_number_reading').value,
+        value: document.getElementById('value').value,
+        reading_date: document.getElementById('reading_date').value
+    };
+
+    fetch('http://localhost:3000/voda/customer/add-reading', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.message) {
+            alert(data.message);
+        } else {
+            alert("✅ Odečet byl úspěšně přidán.");
+        }
+    })
+    .catch(error => console.error('❌ Chyba:', error));
+});
+
+// ✏️ Úprava odečtu
+document.getElementById('editReadingForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    if (!checkToken()) return;
+
+    const data = {
+        reading_id: document.getElementById('old_reading_id').value,
+        value: document.getElementById('edit_value').value,
+        reading_date: document.getElementById('edit_reading_date').value
+    };
+
+    fetch('http://localhost:3000/voda/customer/edit-reading', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.message) {
+            alert(data.message);
+        } else {
+            alert("✅ Odečet byl úspěšně upraven.");
+        }
+    })
+    .catch(error => console.error('❌ Chyba:', error));
+});
+
     </script>
 </body>
 </html>
