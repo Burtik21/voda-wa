@@ -1,43 +1,110 @@
+# 📄 Voda API - Dokumentace
 
-REGISTER FIRMA:
-curl -X POST http://localhost:3000/voda/auth/register -H "Content-Type: application/json" -d "{"name":"Firma", "email":"firma@firma.cz", "password":"firma"}"
+## ⚙️ **Postup pro práci s API**
 
-LOGIN FIRMA:
-curl -X POST http://localhost:3000/voda/auth/login-firm -H "Content-Type: application/json" -d "{\"email\":\"firma@firma.cz\", \"password\":\"firma\"}"
+1. **Registrace firmy nebo zákazníka**
+   - Firma/ se nejprve **zaregistruje** poté **přihlásí**.
+   - Po přihlášení. může firma zaregistrovat zákazníka
 
-LOGIN ZAKAZNIK:
-curl -X POST http://localhost:3000/voda/auth/login-customer -H "Content-Type: application/json" -d "{\"email\":\"jan.novak10@example.com\", \"password\":
-\"78650c0b848629d1\"}"
+2. **Po přihlášení dostane firma/zákazník  JWT token**
+   - Tento token je potřeba **zasílat v hlavičce Authorization** při každém požadavku.
+   - Formát: `Authorization: Bearer SEM_VLOZ_SVŮJ_TOKEN`
 
-ODHLASENI:
-curl -X POST http://localhost:3000/voda/auth/logout -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiZW1haWwiOiJqYW4ubm92YWsxMEBleGFtcGxlLmNvbSIsInJvbGUiOiJjdXN0b21lciIsImlhdCI6MTczNjc4ODg2OSwiZXhwIjoxNzM2NzkyNDY5fQ.epkLT48DG_pmkxjclhkkTICEhZsCsRT6BEcY8dR7Jsk"
-
-ODSTRANENI ZAKAZNIKA:
-curl -X DELETE http://localhost:3000/voda/firm/delete-customer -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZW1haWwiOiJmaXJtYUBmaXJtYS5jeiIsInJvbGUiOiJmaXJtIiwiaWF0IjoxNzM2Nzg4NjkyLCJleHAiOjE3MzY3OTIyOTJ9.kXagB4PUBLv7xJiGLE3aW5geJbWEJigE1MYwFd7Wq58" -H "Content-Type: application/json" -d "{\"email\":\"jan.novak20@example.com\"}"
-
-VYTVORENI ZAKAZNIKA:
-curl -X POST http://localhost:3000/voda/firm/add-customer -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZW1haWwiOiJmaXJtYUBmaXJtYS5jeiIsInJvbGUiOiJmaXJtIiwiaWF0IjoxNzM2Nzg4Mjc4LCJleHAiOjE3MzY3OTE4Nzh9.KpUUqrT8t4syvAaHO2CPe8s90cc1D3VmjfQ28CNsu7I" -H "Content-Type: application/json" -d "{\"name\":\"Jan Novák\", \"email\":\"jan.novak20@example.com\", \"address\":\"Ulice 123, Praha\"}"
-
-PRIDANI MĚŘIČE:
-curl -X POST http://localhost:3000/voda/customer/add-meter -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiZW1haWwiOiJqYW4ubm92YWsxMEBleGFtcGxlLmNvbSIsInJvbGUiOiJjdXN0b21lciIsImlhdCI6MTczNjc4ODg2OSwiZXhwIjoxNzM2NzkyNDY5fQ.epkLT48DG_pmkxjclhkkTICEhZsCsRT6BEcY8dR7Jsk" -H "Content-Type: application/json" -d "{\"property_id\":1, \"type\":\"water\", \"serial_number\":\"SK123456\"}"
-
-PRIDANI ODECTU:
-curl -X POST http://localhost:3000/voda/customer/add-reading -H "Authorization: Bearer TVŮJ_JWT_TOKEN" -H "Content-Type: application/json" -d "{\"meter_id\":1, \"value\":150.75, \"reading_date\":\"2024-01-15\"}"
+3. **Použití API endpointů**
+   - Jednotlivé endpointy slouží pro správu zákazníků, měřidel a odečtů.
+   - HTML formulář (zatím né moc funkční) slouží k přidání/upravení  měřičů a odečtů
 
 
-STAHNUTI REPORTU:
-curl -X GET "http://localhost:3000/voda/report/download-report/1?format=csv" -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiZW1haWwiOiJqYW4ubm92YWsxMEBleGFtcGxlLmNvbSIsInJvbGUiOiJjdXN0b21lciIsImlhdCI6MTczNjc4NjM2NCwiZXhwIjoxNzM2Nzg5OTY0fQ.QRFYneoDbw0IgGG0ACuv2tp01rlhGqJRnI-ELQKfIuw"
+---
+
+## 🔐 **Autentizační endpointy**
+
+### ✅ **Registrace firmy**
+```bash
+curl -X POST https://sajmiho.lol/voda/auth/register -H "Content-Type: application/json" -d "{\"name\":\"Firma\", \"email\":\"firma@firma.cz\", \"password\":\"vaseheslo\"}" --insecure
+```
+
+### 🔑 **Přihlášení firmy**
+```bash
+curl -X POST https://sajmiho.lol/voda/auth/login-firm -H "Content-Type: application/json" -d "{\"email\":\"firma@firma.cz\", \"password\":\"vaseheslo\"}" --insecure
+```
+
+### 🔑 **Přihlášení zákazníka**
+```bash
+curl -X POST https://sajmiho.lol/voda/auth/login-customer -H "Content-Type: application/json" -d "{\"email\":\"zakaznik@example.com\", \"password\":\"vaseheslo\"}" --insecure
+```
+
+### 🚪 **Odhlášení**
+```bash
+curl -X POST https://sajmiho.lol/voda/auth/logout -H "Authorization: Bearer SEM_VLOZ_SVŮJ_TOKEN" --insecure
+```
+
+---
+
+## 👥 **Správa zákazníků (pouze firma)**
+
+### ➕ **Vytvoření zákazníka**
+```bash
+curl -X POST https://sajmiho.lol/voda/firm/add-customer -H "Authorization: Bearer SEM_VLOZ_SVŮJ_TOKEN" -H "Content-Type: application/json" -d "{\"name\":\"Jan Novák\", \"email\":\"zakaznik@example.com\", \"address\":\"Ulice 123, Praha\"}" --insecure
+```
+
+### ❌ **Odstranění zákazníka**
+```bash
+curl -X DELETE https://sajmiho.lol/voda/firm/delete-customer -H "Authorization: Bearer SEM_VLOZ_SVŮJ_TOKEN" -H "Content-Type: application/json" -d "{\"email\":\"zakaznik@example.com\"}" --insecure
+```
+
+---
+
+## 📟 **Správa měřidel a odečtů (pouze zákazník)**
+
+### ➕ **Přidání měřidla**
+```bash
+curl -X POST https://sajmiho.lol/voda/customer/add-meter -H "Authorization: Bearer SEM_VLOZ_SVŮJ_TOKEN" -H "Content-Type: application/json" -d "{\"type\":\"water\", \"serial_number\":\"SK123456\"}" --insecure
+```
+
+### ✏️ **Úprava měřidla**
+```bash
+curl -X POST https://sajmiho.lol/voda/customer/edit-meter -H "Authorization: Bearer SEM_VLOZ_SVŮJ_TOKEN" -H "Content-Type: application/json" -d "{\"old_serial_number\":\"SK123456\", \"new_serial_number\":\"SK654321\", \"type\":\"warm\"}" --insecure
+```
+
+### ➕ **Přidání odečtu**
+```bash
+curl -X POST https://sajmiho.lol/voda/customer/add-reading -H "Authorization: Bearer SEM_VLOZ_SVŮJ_TOKEN" -H "Content-Type: application/json" -d "{\"serial_number\":\"SK123456\", \"value\":150.75, \"reading_date\":\"2024-01-15\"}" --insecure
+```
+
+### ✏️ **Úprava odečtu**
+```bash
+curl -X POST https://sajmiho.lol/voda/customer/edit-reading -H "Authorization: Bearer SEM_VLOZ_SVŮJ_TOKEN" -H "Content-Type: application/json" -d "{\"reading_id\":1, \"value\":200.00, \"reading_date\":\"2024-01-20\"}" --insecure
+```
+
+---
+
+## 📥 **Stažení reportu**
+
+### 📄 **Stažení reportu ve formátu CSV**
+```bash
+curl -X GET "https://sajmiho.lol/voda/report/download-report/1?format=csv" -H "Authorization: Bearer SEM_VLOZ_SVŮJ_TOKEN" --insecure
+```
+
+### 📄 **Stažení reportu ve formátu JSON**
+```bash
+curl -X GET "https://sajmiho.lol/voda/report/download-report/1?format=json" -H "Authorization: Bearer SEM_VLOZ_SVŮJ_TOKEN" --insecure
+```
+
+## TEST ÚČTY
+### **ZÁKAZNÍK**
+```bash
+curl -X POST https://sajmiho.lol/voda/auth/login-customer -H "Content-Type: application/json" -d "{\"email\":\"jan.novak10@example.com\", \"password\":
+\"78650c0b848629d1\"}" --insecure
+```
+### **FIRMA**
+```bash
+curl -X POST https://sajmiho.lol/voda/auth/login-firm -H "Content-Type: application/json" -d "{\"email\":\"firma@firma.cz\", \"password\":\"firma\"}" --insecure
+
+```
 
 
 
 
-
-
-
-
-
-
-
-
-
+🚀 **Voda API je připraveno pro použití!**
 
